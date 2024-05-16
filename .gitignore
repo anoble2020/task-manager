@@ -1,0 +1,10 @@
+# Node artifact files
+node_modules/
+
+# Ignore configuration file
+.env
+
+# Ignore package.lock
+package-lock.json
+
+build/*
