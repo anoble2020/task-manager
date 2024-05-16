@@ -1,2 +1,2 @@
 # task-manager
-A personal task manager node app
+A personal task manager app built with React.js and Tailwind.css
