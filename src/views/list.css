@@ -124,6 +124,16 @@ h1 {
   color: #fff;
 }
 
+.priority.medium {
+  background-color: #f5a106;
+  color: #fff;
+}
+
+.priority.low {
+  background-color: #61fe95;
+  color: #000000;
+}
+
 .issues-table img {
   width: 24px;
   height: 24px;
@@ -144,4 +154,47 @@ h1 {
 .logo-text{
   font-size: 24px;
   font-weight: bold;
+}
+
+.modal {
+  width: 600px;
+  max-width: 90%;
+  margin: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 4px;
+  outline: none;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.spinner {
+  border-top-color: #3498db;
+  animation: spinner 1.5s linear infinite;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
