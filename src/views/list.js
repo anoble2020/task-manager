@@ -9,7 +9,7 @@ const List = (props) => {
   return (
     <div className="list-container">
       <Helmet>
-        <title>Tasky</title>
+        <title>tasky</title>
       </Helmet>
   <div class="container">
     <aside class="sidebar">

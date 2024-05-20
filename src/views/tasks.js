@@ -1,11 +1,58 @@
 import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
-import { Filter, MoreVertical, PlusCircle } from 'lucide-react';
-import { Helmet } from 'react-helmet';
+import { MoreVertical, PlusCircle, Search, Eye, Edit, Trash } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import './list.css';
 import { insertTask, fetchTasks, fetchProjects } from '../db.js';
 import { showToast } from '../toast.js';
+
+const RowMenu = ({ taskId }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleClickOutside = (event) => {
+    if (event.target.closest('.row-menu') === null) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
+  return (
+    <div className="relative row-menu">
+      <button onClick={toggleMenu}>
+        <MoreVertical color="black" size={30} className="h-3" />
+      </button>
+      {isOpen && (
+        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+          <div className="py-1">
+            <button className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+              <Eye className="mr-2" size={16} />
+              View
+            </button>
+            <button className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+              <Edit className="mr-2" size={16} />
+              Edit
+            </button>
+            <button className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+              <Trash className="mr-2" size={16} />
+              Delete
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const Tasks = (props) => {
 
@@ -18,6 +65,33 @@ const Tasks = (props) => {
     const [tasks, setTasks] = useState([]);
     const [projects, setProjects] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filteredTasks, setFilteredTasks] = useState([]);
+
+    const modalVariants = {
+        hidden: { opacity: 0, y: -50 },
+        visible: { opacity: 1, y: 0 },
+        };
+
+    const modalTransition = {
+        ease: "easeOut", duration: 2
+        /*type: 'spring',
+        stiffness: 300,
+        damping: 30,
+        duration: 0.5*/
+    };
+
+    const headerVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1 },
+    };
+
+    useEffect(() => {
+        const filtered = tasks.filter((task) =>
+            task.title.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredTasks(filtered);
+    }, [searchQuery, tasks]);
 
     useEffect(() => {
         const getTasks = async () => {
@@ -25,6 +99,7 @@ const Tasks = (props) => {
                 setIsLoading(true);
                 const fetchedTasks = await fetchTasks();
                 setTasks(fetchedTasks);
+                setFilteredTasks(fetchedTasks);
                 setIsLoading(false);
             } catch (error) {
                 console.error('Error fetching tasks:', error);
@@ -80,27 +155,37 @@ const Tasks = (props) => {
 
     return (
         <div className="list-container">
-            <Helmet>
-                <title>Tasky</title>
-            </Helmet>
-            <div className="flex items-center justify-between mb-4 px-2">
-                <h1 class="font-medium">Tasks</h1>
-                <span className="flex items-center">
-                    <button className="flex items-center text-black px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 focus:outline-none" onClick={openModal}>
+            <motion.h1
+                className="font-medium"
+                initial="hidden"
+                animate="visible"
+                variants={headerVariants}
+                transition={{ ease: "linear", duration: 0.8 }}>
+                Tasks
+                </motion.h1>
+            <div className="flex items-center justify-between px-2">
+                <div className="search-filter mb-4 flex items-center w-1/2">
+                    <input
+                    type="text"
+                    placeholder="🔍  Search tasks..."
+                    className="pl-10 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                </div>
+            <span className="flex items-center">
+                    <button className="flex items-center text-black px-4 py-2 rounded hover:bg-gray-300 focus:outline-none" onClick={openModal}>
                         <PlusCircle color="black" size={16} className="mr-2" />
                         New Task
                     </button>
                 </span>
-            </div>
-            <div class="search-filter mb-4 flex items-center">
-                <input type="text" placeholder="Search tasks..."></input>
-                <button class="filter-btn"><Filter color="black" size={30} class="px-2 h-3" /></button>
             </div>
         {isLoading ? (
             <div className="flex justify-center items-center">
                 <div className="spinner ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32"></div>
             </div>
         ) : (
+            <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: 'easeOut' }}>
             <table class="issues-table">
                 <thead>
                     <tr className="bg-gray-200 text-gray-700">
@@ -110,15 +195,19 @@ const Tasks = (props) => {
                         <th>Priority</th>
                         <th>Target Date</th>
                         <th>Created</th>
-                        <th>Actions</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {tasks.map((task) => (
+                    {filteredTasks.map((task) => (
                         <tr key={task.id} className="border-b hover:bg-gray-100">
                             <td>{task.id}</td>
                             <td>{task.title}</td>
-                            <td>{task.project.name}</td>
+                            <td>
+                                <span className="project border-2">
+                                    {task.project.name}
+                                </span>
+                            </td>
                             <td>
                                 <span className={`priority ${task.priority.toLowerCase()}`}>
                                     {task.priority}
@@ -127,17 +216,32 @@ const Tasks = (props) => {
                             <td>{new Date(task.target_date).toLocaleDateString()}</td>
                             <td>{new Date(task.created_at).toLocaleDateString()}</td>
                             <td>
-                                <button class="more-btn">
-                                    <MoreVertical color="black" size={30} class="px-2 h-3" />
-                                </button>
+                                <RowMenu taskId={task.id} />
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+            </motion.div>
         )}
 
             {/* Modal */}
+            <AnimatePresence>
+            {modalIsOpen && (
+            <motion.div
+                className="modal-overlay"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+            >
+                <motion.div
+                    className="modal-container"
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                    variants={modalVariants}
+                    transition={modalTransition}
+                >
             <Modal
                 appElement={document.getElementById('app')}
                 isOpen={modalIsOpen}
@@ -232,7 +336,11 @@ const Tasks = (props) => {
                     </button>
                 </div>
             </Modal>
-        </div>
+            </motion.div>
+        </motion.div>
+    )}
+    </AnimatePresence>
+    </div>
     )
 }
 
