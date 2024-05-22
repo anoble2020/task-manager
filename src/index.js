@@ -9,6 +9,7 @@ import Layout from './layouts/layout.js';
 import Home from './views/home.js';
 import Tasks from './views/tasks.js';
 import Notes from './views/notes.js';
+import Projects from './views/projects.js';
 import NotFound from './views/not-found';
 
 /*** AUTH ***/
@@ -42,6 +43,7 @@ const App = () => {
           <Route exact path="/" component={Home} />
           <Route path="/tasks" component={Tasks} />
           <Route path="/notes" component={Notes} />
+          <Route path="/projects" component={Projects} />
           <Route path="*" component={NotFound} />
         </Switch>
       </Layout>
