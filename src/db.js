@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
 const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = createClient(supabaseUrl, supabaseKey);
 
 export const insertTask = async (task) => {
   try {
@@ -25,11 +25,14 @@ export const insertTask = async (task) => {
   }
 };
 
-export const fetchTasks = async () => {
+export const fetchTasks = async (user) => {
     try {
+        //const uid = '431b9315-5274-462c-8cd7-3d9925788f58';
+console.log('user', user);
       const { data, error } = await supabase
         .from('tasks')
-        .select('*, project:projects(name)')
+        .select('*, project:projects(name,id)')
+        .eq('created_by', user.id)
         .order('created_at', { ascending: false });
   
       if (error) {

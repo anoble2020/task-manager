@@ -8,7 +8,7 @@ export const showToast = (message, type) => {
         duration: 3000,
         close: true,
         gravity: 'top',
-        position: 'right',
+        position: 'center',
         backgroundColor: backgroundColor,
         stopOnFocus: true,
     }).showToast();

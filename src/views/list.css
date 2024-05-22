@@ -97,6 +97,7 @@ h1 {
 .issues-table {
   width: 100%;
   border-collapse: collapse;
+  border-radius: 20px;
 }
 
 .issues-table th,
@@ -104,10 +105,6 @@ h1 {
   padding: 10px;
   text-align: left;
   border-bottom: 1px solid #ccc;
-}
-
-.issues-table th {
-  background-color: #f4f4f4;
 }
 
 .priority, .project {
