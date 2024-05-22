@@ -1,5 +1,5 @@
 # tasky
-A task manager app built with React.js and Tailwind.css
+An open-source task manager app built with React.js and Tailwind.css
 
 This README provides information on how to set up, use, and contribute to the project.
 
@@ -108,3 +108,15 @@ json
   }
 ]
 ```
+
+## Contributing
+
+We welcome contributions!
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+For any questions or feedback, please leave a comment.
