@@ -1,9 +1,7 @@
 # tasky
 A task manager app built with React.js and Tailwind.css
 
-# Tasky - Task Management App
-
-Welcome to Tasky! This application helps you track and manage your tasks efficiently. This README provides information on how to set up, use, and contribute to the project.
+This README provides information on how to set up, use, and contribute to the project.
 
 ## Table of Contents
 
