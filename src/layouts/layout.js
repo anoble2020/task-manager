@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Settings, CircleCheck, Castle, ScrollText, CircleUser, BriefcaseBusiness } from 'lucide-react';
 import { AuthContext } from '../auth/AuthContext.js';
+import Sidebar from './sidebar.js';
 
 const Layout = ({ children }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -54,9 +55,9 @@ const Layout = ({ children }) => {
                 <nav className="navigation mt-8">
                     <ul>
                         <li><Link to="/" className="block px-4 py-2 hover:bg-gray-200"><Castle className="inline-block mr-2" size={24} /> Home</Link></li>
-                        <li><Link to="/tasks" className="block px-4 py-2 hover:bg-gray-200"><CircleCheck className="inline-block mr-2" size={24} /> Tasks</Link></li>
-                        <li><Link to="/notes" className="block px-4 py-2 hover:bg-gray-200"><ScrollText className="inline-block mr-2" size={24} /> Notes</Link></li>
                         <li><Link to="/projects" className="block px-4 py-2 hover:bg-gray-200"><BriefcaseBusiness className="inline-block mr-2" size={24} /> Projects</Link></li>
+                        Pages
+                        <Sidebar/>
                     </ul>
                 </nav>
                 <div className="settings mt-auto px-4 py-2">
